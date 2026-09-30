@@ -1,6 +1,6 @@
 export function formatMoney(amount: unknown, currency?: { code?: string; symbol?: string } | null) {
   const n = Number(amount);
-  if (Number.isNaN(n)) return "—";
+  if (Number.isNaN(n)) return "-";
   const code = currency?.code ? String(currency.code).toUpperCase() : "";
   if (code && /^[A-Z]{3}$/.test(code)) {
     try {
@@ -19,9 +19,9 @@ export function formatMoney(amount: unknown, currency?: { code?: string; symbol?
 }
 
 export function formatDate(date: unknown) {
-  if (!date) return "—";
+  if (!date) return "-";
   const d = new Date(String(date));
-  if (Number.isNaN(d.getTime())) return "—";
+  if (Number.isNaN(d.getTime())) return "-";
   return d.toLocaleString();
 }
 

@@ -163,7 +163,7 @@ export default function ImpactPage() {
               <div className="text-xs font-extrabold tracking-[2px] text-orange uppercase">Community capability</div>
               <h2 className="mt-2 font-serif text-[clamp(35px,4vw,54px)] leading-[1.08] text-green-dark">Skills are the infrastructure that stays.</h2>
             </div>
-            <p className="text-[17px] leading-loose text-[#4e5c54]">We do not see communities only as beneficiaries. They are producers, knowledge holders, makers and adaptation partners. Training is designed to strengthen practical production capability—from selecting and preparing Murta to weaving, finishing, quality improvement and developing new handicraft formats that can reach broader markets.</p>
+            <p className="text-[17px] leading-loose text-[#4e5c54]">We do not see communities only as beneficiaries. They are producers, knowledge holders, makers and adaptation partners. Training is designed to strengthen practical production capability from selecting and preparing Murta to weaving, finishing, quality improvement and developing new handicraft formats that can reach broader markets.</p>
           </div>
           <div className="grid gap-px overflow-hidden rounded-3xl border border-[#dde3da] bg-[#dde3da] sm:grid-cols-2 lg:grid-cols-4">
             {outcomes.map(([n, title, text]) => (
@@ -191,7 +191,7 @@ export default function ImpactPage() {
             {funding.map(([n, title, text]) => (
               <div key={n} className="grid grid-cols-[38px_1fr] gap-3.5 border-b border-[#e7e0d2] py-[17px] last:border-b-0">
                 <span className="grid h-[30px] w-[30px] place-items-center rounded-full bg-[#e6eee5] text-[10px] font-black text-green-dark">{n}</span>
-                <p className="m-0 text-sm leading-snug text-[#56625a]"><strong className="text-green-dark">{title}</strong> — {text}</p>
+                <p className="m-0 text-sm leading-snug text-[#56625a]"><strong className="text-green-dark">{title}</strong> {text}</p>
               </div>
             ))}
           </div>
@@ -231,7 +231,7 @@ export default function ImpactPage() {
         <div className="page-wrap max-w-[850px] text-center">
           <span className="text-[11px] font-black tracking-[2px] text-[#ffe2c9]">DESHOJO • TAHIRPUR HAOR</span>
           <h2 className="mt-2.5 mb-[15px] font-serif text-[38px] leading-[1.08] text-white sm:text-[clamp(36px,5vw,58px)]">Local material. Local knowledge. Long-term resilience.</h2>
-          <p className="mb-[25px] text-[17px] text-[#fff2e9]">We welcome partners who want to build climate adaptation with communities—not only for them.</p>
+          <p className="mb-[25px] text-[17px] text-[#fff2e9]">We welcome partners who want to build climate adaptation with communities not only for them.</p>
           <a href="mailto:info@deshojobazar.com?subject=Haor%20Climate%20Adaptation%20Partnership" className="inline-flex min-h-[50px] items-center justify-center rounded-full border border-white/70 px-6 py-3.5 font-bold hover:bg-white hover:text-green-dark">
             info@deshojobazar.com
           </a>

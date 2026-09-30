@@ -153,7 +153,7 @@ img{max-width:100%;display:block}
   .beyond-grid{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:8px;margin-right:-12px}.beyond-card{min-width:78vw;scroll-snap-align:start}
 }
 
-/* Impact page — Tahirpur Haor climate & livelihoods */
+/* Impact page Tahirpur Haor climate & livelihoods */
 .impact-page{background:#fffdf7}.impact-page h2{font-family:Georgia,"Noto Serif Bengali",serif;color:var(--green-dark)}
 .impact-hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#073f31 0%,#0b5a43 55%,#386e54 100%);color:#fff}
 .impact-hero-pattern{position:absolute;inset:0;opacity:.24;background-image:radial-gradient(circle at 15% 20%,rgba(255,255,255,.22) 0 2px,transparent 3px),radial-gradient(circle at 75% 75%,rgba(233,197,111,.3) 0 2px,transparent 3px);background-size:46px 46px,70px 70px}

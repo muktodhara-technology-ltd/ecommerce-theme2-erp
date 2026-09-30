@@ -34,9 +34,9 @@ export default function DashboardProfilePage() {
       </div>
 
       <dl className="divide-y divide-line overflow-hidden rounded-xl border border-line bg-white">
-        <Row label="Full name" value={customer?.full_name || "—"} />
-        <Row label="Email" value={customer?.email || "—"} />
-        <Row label="Phone" value={customer?.phone || "—"} />
+        <Row label="Full name" value={customer?.full_name || "-"} />
+        <Row label="Email" value={customer?.email || "-"} />
+        <Row label="Phone" value={customer?.phone || "-"} />
         <div className="grid gap-1 px-4 py-3 sm:grid-cols-3 sm:gap-4 sm:px-5 sm:py-4">
           <dt className="text-sm text-muted">Default address</dt>
           <dd className="whitespace-pre-line text-sm text-green-dark sm:col-span-2">

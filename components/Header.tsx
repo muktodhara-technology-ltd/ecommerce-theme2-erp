@@ -99,7 +99,7 @@ export function Header() {
                 </div>
               </div>
             </div>
-            <NavLink href="/reviva">Reviva</NavLink>
+            <NavLink href="/revitalization">Revitalization</NavLink>
             <NavLink href="/impact">Impact</NavLink>
             <NavLink href="/#story">আমাদের গল্প</NavLink>
           </nav>

@@ -57,7 +57,7 @@ export function Hero() {
             )}
           </h1>
           <p className="mb-6 max-w-[540px] text-[15px] leading-relaxed text-[#f3f4ef] sm:mb-[30px] sm:text-lg">
-            {activeMeta?.subtitle || "বাংলার মাঠ, কৃষক ও ঐতিহ্যের নির্বাচিত খাবার—বিশ্বস্ত উৎস থেকে আপনার ঘরে।"}
+            {activeMeta?.subtitle || "বাংলার মাঠ, কৃষক ও ঐতিহ্যের নির্বাচিত খাবার বিশ্বস্ত উৎস থেকে আপনার ঘরে।"}
           </p>
           <div className="flex flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:gap-2">
             <Link

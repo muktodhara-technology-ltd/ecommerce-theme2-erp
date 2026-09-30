@@ -37,13 +37,13 @@ const beyond = [
   { n: "01", title: "উৎসের গল্প", text: "পণ্যের অঞ্চল, প্রস্তুতি ও স্থানীয় প্রেক্ষাপটকে সামনে আনা।", href: "/#farm-life", label: "Farm life →" },
   { n: "02", title: "খাদ্যঐতিহ্য", text: "হারিয়ে যেতে থাকা আঞ্চলিক স্বাদ ও পুরোনো খাবারের স্মৃতি ধরে রাখা।", href: shopHref("পিঠা"), label: "Explore heritage →" },
   { n: "03", title: "ঘরের রান্না", text: "দেশজ উপকরণকে আধুনিক পরিবারের রান্নায় সহজভাবে ফিরিয়ে আনা।", href: "/shop", label: "Shop pantry →" },
-  { n: "04", title: "মানুষের সংযোগ", text: "উৎপাদক থেকে ক্রেতা—খাবারের পুরো যাত্রায় আস্থা ও সম্পর্ক গড়া।", href: "/#story", label: "Our story →" },
+  { n: "04", title: "মানুষের সংযোগ", text: "উৎপাদক থেকে ক্রেতা খাবারের পুরো যাত্রায় আস্থা ও সম্পর্ক গড়া।", href: "/#story", label: "Our story →" },
 ];
 
 const reviews = [
   { text: "প্যাকেজিং পরিষ্কার ছিল, পণ্যও ভালো অবস্থায় পেয়েছি। দেশি খাবারের জন্য সুন্দর একটা উদ্যোগ।", name: "রাফি", place: "ঢাকা" },
   { text: "ঘি আর সরিষার তেলের স্বাদ বেশ ভালো। ওয়েবসাইটে অর্ডার করা সহজ হলে নিয়মিত কেনা আরও সুবিধা হবে।", name: "নুসরাত", place: "ঢাকা" },
-  { text: "পিঠা ও দইয়ের মতো আঞ্চলিক পণ্য এক জায়গায় পাওয়া—এটাই সবচেয়ে ভালো লেগেছে।", name: "সাদমান", place: "নারায়ণগঞ্জ" },
+  { text: "পিঠা ও দইয়ের মতো আঞ্চলিক পণ্য এক জায়গায় পাওয়া এটাই সবচেয়ে ভালো লেগেছে।", name: "সাদমান", place: "নারায়ণগঞ্জ" },
 ];
 
 const trustItems = [
@@ -92,7 +92,7 @@ export default async function HomePage() {
             <div>
               <div className="text-xs font-extrabold tracking-[2px] text-orange uppercase">Shop by category</div>
               <h2 className="mt-1.5 font-serif text-[clamp(26px,5vw,50px)] leading-[1.1] text-green-dark">আপনার ঘরের প্রয়োজন</h2>
-              <p className="mt-3 max-w-[560px] text-sm text-muted sm:text-base">দৈনন্দিন চাল-ডাল থেকে ঘি, মধু, তেল, পিঠা ও দেশি খাবার—এক জায়গায়।</p>
+              <p className="mt-3 max-w-[560px] text-sm text-muted sm:text-base">দৈনন্দিন চাল-ডাল থেকে ঘি, মধু, তেল, পিঠা ও দেশি খাবার এক জায়গায়।</p>
             </div>
             <SectionLink href="/shop">সব ক্যাটাগরি →</SectionLink>
           </div>
@@ -184,7 +184,7 @@ export default async function HomePage() {
               <div className="text-xs font-extrabold tracking-[2px] text-orange uppercase">Why Deshojo</div>
               <h2 className="mt-2 font-serif text-[clamp(26px,5vw,50px)] leading-[1.1] text-white">মাটি থেকে আপনার টেবিলে</h2>
               <p className="text-base text-[#dde9e3]">
-                আমাদের লক্ষ্য শুধু পণ্য বিক্রি নয়—বাংলার স্থানীয় উৎপাদক, আঞ্চলিক খাবার ও হারিয়ে যেতে থাকা স্বাদকে আধুনিক ই-কমার্সের মাধ্যমে মানুষের কাছে পৌঁছে দেওয়া।
+                আমাদের লক্ষ্য শুধু পণ্য বিক্রি নয় বাংলার স্থানীয় উৎপাদক, আঞ্চলিক খাবার ও হারিয়ে যেতে থাকা স্বাদকে আধুনিক ই-কমার্সের মাধ্যমে মানুষের কাছে পৌঁছে দেওয়া।
               </p>
               <div className="my-6 grid grid-cols-1 gap-3.5 sm:grid-cols-2">
                 {[
@@ -215,7 +215,7 @@ export default async function HomePage() {
               <div className="text-xs font-extrabold tracking-[2px] text-orange uppercase">Farm life</div>
               <h2 className="mt-1.5 font-serif text-[clamp(26px,5vw,50px)] leading-[1.1] text-green-dark">মাঠের জীবন থেকে খাবারের গল্প</h2>
             </div>
-            <p className="text-sm text-muted sm:text-base">পণ্য কোথা থেকে আসে, কীভাবে তৈরি হয় এবং কোন মানুষগুলোর শ্রমে আমাদের ঘরের স্বাদ তৈরি হয়—সেই গল্পগুলোকে সামনে আনা Deshojo-র অংশ।</p>
+            <p className="text-sm text-muted sm:text-base">পণ্য কোথা থেকে আসে, কীভাবে তৈরি হয় এবং কোন মানুষগুলোর শ্রমে আমাদের ঘরের স্বাদ তৈরি হয় সেই গল্পগুলোকে সামনে আনা Deshojo-র অংশ।</p>
           </div>
           <div className="grid gap-5 lg:grid-cols-[1.35fr_0.65fr]">
             <article className="grid overflow-hidden rounded-[26px] border border-[#e4ddcf] bg-white lg:grid-cols-[1.08fr_0.92fr]">
@@ -261,7 +261,7 @@ export default async function HomePage() {
             <div className="absolute right-4 bottom-4 left-4 z-[2] sm:right-7 sm:bottom-7 sm:left-7">
               <div className="text-xs font-extrabold tracking-[2px] text-gold uppercase">Heritage grains</div>
               <h3 className="my-1 font-serif text-[clamp(22px,4vw,30px)]">বিশুদ্ধ চাল, পরিচিত ঘ্রাণ</h3>
-              <p className="m-0 text-sm text-[#eef5f1] sm:text-base">প্রতিদিনের ভাত থেকে উৎসবের পোলাও—পছন্দ করুন আপনার চাল।</p>
+              <p className="m-0 text-sm text-[#eef5f1] sm:text-base">প্রতিদিনের ভাত থেকে উৎসবের পোলাও পছন্দ করুন আপনার চাল।</p>
             </div>
           </Link>
           <Link href={shopHref("পিঠা")} className="relative min-h-[260px] overflow-hidden rounded-3xl text-white sm:min-h-[330px] lg:min-h-[400px]" style={{ backgroundImage: "url('/img/pitha.webp')", backgroundSize: "cover", backgroundPosition: "center" }}>
@@ -336,9 +336,9 @@ export default async function HomePage() {
         <div className="page-wrap">
           <NoApiNote />
           <p className="mx-auto max-w-[900px] px-1 font-serif text-[clamp(22px,4.5vw,47px)] leading-snug text-green-dark">
-            “শুধু পণ্য নয়—বাংলার মাটি, মানুষের শ্রম আর ঘরের পরিচিত স্বাদকে আমরা পৌঁছে দিতে চাই প্রতিটি অর্ডারে।”
+            “শুধু পণ্য নয় বাংলার মাটি, মানুষের শ্রম আর ঘরের পরিচিত স্বাদকে আমরা পৌঁছে দিতে চাই প্রতিটি অর্ডারে।”
           </p>
-          <div className="mt-[18px] font-extrabold text-green">— Deshojo Bazar</div>
+          <div className="mt-[18px] font-extrabold text-green">Deshojo Bazar</div>
         </div>
       </section>
 

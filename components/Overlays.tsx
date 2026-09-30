@@ -204,7 +204,7 @@ function MobileMenu() {
             ))}
           </div>
         </details>
-        <Link href="/reviva">Reviva</Link>
+        <Link href="/revitalization">Revitalization</Link>
         <Link href="/#farm-life">Farm Life overview</Link>
         <Link href="/#beyond">Beyond Our Products</Link>
         <Link href="/impact">Climate & Community Impact</Link>

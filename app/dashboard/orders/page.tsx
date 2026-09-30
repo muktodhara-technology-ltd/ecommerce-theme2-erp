@@ -102,7 +102,7 @@ export default function DashboardOrdersPage() {
                     ) : null}
                   </div>
                   <p className="mt-2 text-xs text-muted">
-                    Shipping: {order.shipping?.label || order.shipping_method || "—"}
+                    Shipping: {order.shipping?.label || order.shipping_method || "-"}
                   </p>
                 </div>
                 <div className="text-left sm:text-right">

@@ -56,7 +56,7 @@ export const products: Product[] = [
     reviews: 210,
     unit: "৫ লিটার",
     stock: true,
-    description: "ঘানি ভাঙ্গা সরিষার তেল—বাংলার রান্নার পরিচিত ঝাঁঝ ও সুবাসের জন্য।",
+    description: "ঘানি ভাঙ্গা সরিষার তেল বাংলার রান্নার পরিচিত ঝাঁঝ ও সুবাসের জন্য।",
   },
   {
     id: "chicken",
@@ -84,7 +84,7 @@ export const products: Product[] = [
     reviews: 174,
     unit: "বড় সরা",
     stock: true,
-    description: "বগুড়ার ঐতিহ্যবাহী স্বাদের মিষ্টি দই—পরিবার, অতিথি আপ্যায়ন ও উপহারের জন্য।",
+    description: "বগুড়ার ঐতিহ্যবাহী স্বাদের মিষ্টি দই পরিবার, অতিথি আপ্যায়ন ও উপহারের জন্য।",
   },
   {
     id: "pitha",
@@ -112,7 +112,7 @@ export const products: Product[] = [
     reviews: 49,
     unit: "প্রতি পিস",
     stock: true,
-    description: "দেশীয় উৎসের নারিকেল—রান্না, পিঠা, মিষ্টি ও দৈনন্দিন ব্যবহারের জন্য।",
+    description: "দেশীয় উৎসের নারিকেল রান্না, পিঠা, মিষ্টি ও দৈনন্দিন ব্যবহারের জন্য।",
   },
   {
     id: "red-sugar",
@@ -126,7 +126,7 @@ export const products: Product[] = [
     reviews: 58,
     unit: "প্রতি কেজি",
     stock: true,
-    description: "দেশীয় লাল চিনি—চা, পায়েস, মিষ্টি ও ঘরোয়া রান্নায় ব্যবহারযোগ্য।",
+    description: "দেশীয় লাল চিনি চা, পায়েস, মিষ্টি ও ঘরোয়া রান্নায় ব্যবহারযোগ্য।",
   },
   {
     id: "duck-eggs",
@@ -154,7 +154,7 @@ export const products: Product[] = [
     reviews: 146,
     unit: "প্রতি কেজি",
     stock: true,
-    description: "সুগন্ধি চিনিগুরা চাল—পোলাও, পায়েস, বিরিয়ানি ও বিশেষ দিনের রান্নার জন্য।",
+    description: "সুগন্ধি চিনিগুরা চাল পোলাও, পায়েস, বিরিয়ানি ও বিশেষ দিনের রান্নার জন্য।",
   },
   {
     id: "ganjiya",

@@ -326,8 +326,8 @@ export default function DashboardOrderDetailPage() {
           <div>
             <p className="text-xs font-semibold uppercase text-gray-600">Bill To</p>
             <p className="mt-1 font-medium">{order.contact_name || "Customer"}</p>
-            <p className="text-sm text-gray-700">{order.contact_email || "—"}</p>
-            <p className="text-sm text-gray-700">{order.contact_phone || "—"}</p>
+            <p className="text-sm text-gray-700">{order.contact_email || "-"}</p>
+            <p className="text-sm text-gray-700">{order.contact_phone || "-"}</p>
             <div className="mt-1 text-sm text-gray-700">
               {formatAddressLines(order.billing_address).map((line) => (
                 <p key={`bill-${line}`}>{line}</p>
@@ -364,7 +364,7 @@ export default function DashboardOrderDetailPage() {
                 <tr key={item.id || `${order.id}-print-${idx}`} className="border-b border-gray-100">
                   <td className="py-2">{itemTitle(item, idx)}</td>
                   <td className="py-2 text-gray-700">
-                    {formatAttributes(item.attributes_snapshot || item.attributes) || item.variant_key || "—"}
+                    {formatAttributes(item.attributes_snapshot || item.attributes) || item.variant_key || "-"}
                   </td>
                   <td className="py-2 text-right">{qty}</td>
                   <td className="py-2 text-right">{formatMoney(unitPrice, order.currency)}</td>
@@ -485,7 +485,7 @@ export default function DashboardOrderDetailPage() {
               <span className="font-semibold text-green-dark">Grand total</span>
               <span className="text-lg font-semibold text-green-dark">{formatMoney(order.grand_total, order.currency)}</span>
             </div>
-            <p className="text-xs text-muted">Shipping: {order.shipping?.label || order.shipping_method || "—"}</p>
+            <p className="text-xs text-muted">Shipping: {order.shipping?.label || order.shipping_method || "-"}</p>
           </div>
 
           {canPayOrder(order) ? (
