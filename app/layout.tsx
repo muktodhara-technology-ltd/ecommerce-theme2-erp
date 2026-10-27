@@ -44,6 +44,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           settings={site.settings}
           heroSlides={site.heroSlides}
           footerColumns={site.footerColumns}
+          headerMenu={site.headerMenu}
+          announcement={site.announcement}
+          newsletter={site.newsletter}
           fromApi={site.fromApi}
         >
           <CatalogProvider products={catalog.products} categories={catalog.categories} fromApi={catalog.fromApi}>

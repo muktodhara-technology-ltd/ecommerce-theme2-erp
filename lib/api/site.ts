@@ -1,6 +1,7 @@
 import { cache } from "react";
 import { ApiLink } from "@/lib/api/apiLink";
 import { resolveMediaUrl } from "@/lib/api/media";
+import { getLanding, text, type ApiSection, type MenuItem } from "@/lib/api/sections";
 import { ecommerceGet, payloadData } from "@/lib/api/server";
 
 export type SiteSettings = {
@@ -24,10 +25,20 @@ export type HeroSlide = {
   subtitle?: string;
 };
 
+/** Top bar text (home "announcement" section). */
+export type Announcement = { text: string; link: string };
+
+/** Newsletter band shown above the footer (home "newsletter" section). */
+export type NewsletterBlock = { title: string; subtitle: string; placeholder: string; buttonLabel: string };
+
 export type SiteBundle = {
   settings: SiteSettings;
   heroSlides: HeroSlide[];
   footerColumns: FooterMenuColumn[];
+  headerMenu: MenuItem[];
+  /** null = section hidden/missing in the ERP; undefined values fall back to the theme defaults */
+  announcement: Announcement | null;
+  newsletter: NewsletterBlock | null;
   fromApi: boolean;
 };
 
@@ -135,11 +146,43 @@ function mapFooterMenus(payload: unknown): FooterMenuColumn[] {
   return columns;
 }
 
+const DEFAULT_ANNOUNCEMENT: Announcement = { text: "", link: "" };
+const DEFAULT_NEWSLETTER: NewsletterBlock = {
+  title: "দেশজ স্বাদের খবর আগে জানুন",
+  subtitle: "নতুন পণ্য, মৌসুমি সংগ্রহ ও বিশেষ অফারের আপডেট পান।",
+  placeholder: "আপনার ইমেইল",
+  buttonLabel: "Subscribe",
+};
+
+/**
+ * Announcement / newsletter come from the home sections. When the ERP sends sections but not this one,
+ * the admin hid it (null); with no sections at all (API down / not set up) the theme default is used.
+ */
+function pickAnnouncement(sections: ApiSection[]): Announcement | null {
+  if (!sections.length) return DEFAULT_ANNOUNCEMENT;
+  const section = sections.find((s) => s.type === "announcement");
+  if (!section) return null;
+  return { text: text(section.config.text), link: text(section.config.link) };
+}
+
+function pickNewsletter(sections: ApiSection[]): NewsletterBlock | null {
+  if (!sections.length) return DEFAULT_NEWSLETTER;
+  const section = sections.find((s) => s.type === "newsletter");
+  if (!section) return null;
+  return {
+    title: text(section.title) || DEFAULT_NEWSLETTER.title,
+    subtitle: text(section.config.subtitle),
+    placeholder: text(section.config.placeholder) || DEFAULT_NEWSLETTER.placeholder,
+    buttonLabel: text(section.config.button_label) || DEFAULT_NEWSLETTER.buttonLabel,
+  };
+}
+
 async function fetchSiteBundleUncached(): Promise<SiteBundle> {
-  const [landingBody, settingsBody, footerBody] = await Promise.all([
+  const [landingBody, settingsBody, footerBody, landingSections] = await Promise.all([
     ecommerceGet(ApiLink.ecommerceLanding, {}, 120),
     ecommerceGet(ApiLink.ecommerceSettings, {}, 120),
     ecommerceGet(ApiLink.ecommerceFooterMenus, {}, 120),
+    getLanding(),
   ]);
 
   const landing = payloadData(landingBody) as Record<string, unknown> | null;
@@ -158,6 +201,9 @@ async function fetchSiteBundleUncached(): Promise<SiteBundle> {
     settings,
     heroSlides,
     footerColumns,
+    headerMenu: landingSections.headerMenu,
+    announcement: pickAnnouncement(landingSections.sections),
+    newsletter: pickNewsletter(landingSections.sections),
     fromApi: Boolean(landingBody || settingsBody),
   };
 }

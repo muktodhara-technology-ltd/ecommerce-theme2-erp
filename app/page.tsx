@@ -6,6 +6,8 @@ import { VideoShop } from "@/components/VideoShop";
 import { NoApiNote } from "@/components/NoApiNote";
 import { IconLeaf, IconPhone, IconShield, IconTruck, beyondIcons } from "@/components/Icons";
 import { getCatalog, getFeaturedProducts } from "@/lib/api/catalog";
+import { getLanding } from "@/lib/api/sections";
+import { SectionRenderer } from "@/components/sections/SectionRenderer";
 import { shopCategories as fallbackShopCategories, shopHref } from "@/lib/products";
 
 const categoryEmojis: Record<string, string> = {
@@ -53,7 +55,15 @@ const trustItems = [
   { icon: IconPhone, title: "কাস্টমার সাপোর্ট", text: "09678148148" },
 ];
 
+/** Home page from the ERP sections (Ecommerce → Front Page → Ecommerce Sections). */
 export default async function HomePage() {
+  const { sections } = await getLanding();
+  if (sections.length) return <SectionRenderer sections={sections} />;
+  return <LegacyHome />;
+}
+
+/** Built-in home page, used while the ERP returns no sections. */
+async function LegacyHome() {
   const [catalog, featured] = await Promise.all([getCatalog(), getFeaturedProducts(8)]);
   const shopCategories =
     catalog.categories.length > 0

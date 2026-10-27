@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useStore } from "@/lib/cart";
 import { ProductImage } from "@/components/ProductImage";
+import { ProductReviews, RatingSummary, WishlistButton, useProductReviews } from "@/components/ProductEngagement";
 import { useSite } from "@/lib/site";
 import { money, type Product } from "@/lib/products";
 
@@ -10,6 +11,7 @@ export function ProductDetail({ product }: { product: Product }) {
   const { add } = useStore();
   const { settings } = useSite();
   const [qty, setQty] = useState(1);
+  const { reviews, summary, reload, enabled: reviewsEnabled } = useProductReviews(product.id);
 
   return (
     <div className="grid items-start gap-6 sm:gap-8 lg:grid-cols-2 lg:gap-[54px]">
@@ -27,9 +29,13 @@ export function ProductDetail({ product }: { product: Product }) {
         <h1 className="mt-2 mb-3 font-serif text-[clamp(26px,6vw,36px)] leading-[1.15] text-green-dark sm:text-[44px] sm:leading-[1.12]">
           {product.name}
         </h1>
-        <div className="text-xs text-[#a86e00]">
-          ★★★★★ <span className="ml-[5px] text-[#8a918c]">{product.rating} • {product.reviews} reviews</span>
-        </div>
+        {reviewsEnabled ? (
+          <RatingSummary summary={summary} />
+        ) : (
+          <div className="text-xs text-[#a86e00]">
+            ★★★★★ <span className="ml-[5px] text-[#8a918c]">{product.rating} • {product.reviews} reviews</span>
+          </div>
+        )}
         <div className="my-3 text-[24px] font-black text-green sm:text-[28px]">
           {money(product.price)} <small className="text-[13px] font-medium text-[#6e7b73]">/ {product.unit}</small>
         </div>
@@ -60,6 +66,7 @@ export function ProductDetail({ product }: { product: Product }) {
           >
             Add to Cart
           </button>
+          <WishlistButton productId={product.id} />
         </div>
         <div className="mt-[22px] border-t border-[#e9e2d5]">
           <Row label="Category" value={product.category} />
@@ -68,6 +75,7 @@ export function ProductDetail({ product }: { product: Product }) {
           <Row label="Support" value={settings.phone || "09678148148"} />
         </div>
       </div>
+      {reviewsEnabled ? <ProductReviews productId={product.id} reviews={reviews} onSubmitted={reload} /> : null}
     </div>
   );
 }

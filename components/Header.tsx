@@ -7,14 +7,27 @@ import { useStore } from "@/lib/cart";
 import { useCustomerAuth } from "@/lib/api/auth";
 import { useSite } from "@/lib/site";
 import { IconCart, IconMenu, IconSearch, IconUser } from "@/components/Icons";
-import { NoApiNote } from "@/components/NoApiNote";
+import type { MenuItem } from "@/lib/api/sections";
 
-const farmLinks = [
-  { href: "/farming/haor", label: "Haor Farm" },
-  { href: "/farming/drought", label: "Drought Farm" },
-  { href: "/farming/coast", label: "Coast Farm" },
-  { href: "/farming/hill", label: "Hill Farm" },
-  { href: "/farming/flood", label: "Flood Farm" },
+/** Used until a header menu is set in ERP → Ecommerce → Menus. */
+export const DEFAULT_MENU: MenuItem[] = [
+  { name: "Shop", url: "/shop" },
+  { name: "Concerns", url: "/#concerns" },
+  { name: "Videos", url: "/#videos" },
+  {
+    name: "Farming Life",
+    url: "#",
+    sub_menu: [
+      { name: "Haor Farm", url: "/farming/haor" },
+      { name: "Drought Farm", url: "/farming/drought" },
+      { name: "Coast Farm", url: "/farming/coast" },
+      { name: "Hill Farm", url: "/farming/hill" },
+      { name: "Flood Farm", url: "/farming/flood" },
+    ],
+  },
+  { name: "Revitalization", url: "/revitalization" },
+  { name: "Impact", url: "/impact" },
+  { name: "আমাদের গল্প", url: "/#story" },
 ];
 
 const iconBtn =
@@ -24,13 +37,14 @@ export function Header() {
   const pathname = usePathname();
   const { count, setCartOpen, setSearchOpen, mobileOpen, setMobileOpen } = useStore();
   const { isLoggedIn, customer, logout, authResolved } = useCustomerAuth();
-  const { settings } = useSite();
-  const [farmOpen, setFarmOpen] = useState(false);
+  const { settings, headerMenu, announcement } = useSite();
+  const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [accountOpen, setAccountOpen] = useState(false);
+  const menu = headerMenu.length ? headerMenu : DEFAULT_MENU;
 
   useEffect(() => {
     setMobileOpen(false);
-    setFarmOpen(false);
+    setOpenMenu(null);
     setAccountOpen(false);
   }, [pathname, setMobileOpen]);
 
@@ -39,6 +53,17 @@ export function Header() {
 
   return (
     <>
+      {announcement?.text ? (
+        <div className="bg-green-dark px-3 py-2 text-center text-[11px] leading-snug text-white/95 sm:px-4 sm:text-[13px]">
+          {announcement.link ? (
+            <a href={announcement.link} className="hover:text-[#f5d59c]">
+              {announcement.text}
+            </a>
+          ) : (
+            announcement.text
+          )}
+        </div>
+      ) : announcement ? (
       <div className="bg-green-dark px-3 py-2 text-center text-[11px] leading-snug text-white/95 sm:px-4 sm:text-[13px]">
         <span className="block sm:inline">ঢাকা ও নির্বাচিত এলাকায় হোম ডেলিভারি</span>
         <span className="mx-1.5 hidden text-white/35 sm:inline">•</span>
@@ -49,6 +74,7 @@ export function Header() {
           </a>
         </span>
       </div>
+      ) : null}
 
       <header className="sticky top-0 z-50 border-b border-[#e6e0d2] bg-[#fffdf8]/95 backdrop-blur-md">
         <div className="page-wrap flex h-[70px] items-center gap-2 sm:h-[76px] sm:gap-3">
@@ -64,44 +90,39 @@ export function Header() {
             className="hidden min-w-0 flex-1 flex-wrap items-center justify-center gap-0.5 text-[12px] font-semibold text-green-dark lg:flex xl:gap-1 xl:text-[13.5px]"
             aria-label="Primary navigation"
           >
-            <NavLink href="/shop">Shop</NavLink>
-            <NavLink href="/#concerns" className="hidden xl:inline-flex">
-              Concerns
-            </NavLink>
-            <NavLink href="/#videos" className="hidden xl:inline-flex">
-              Videos
-            </NavLink>
-            <div className="relative flex items-stretch" onMouseLeave={() => setFarmOpen(false)}>
-              <button
-                type="button"
-                className="flex items-center gap-1.5 rounded-full px-2 py-2 hover:bg-[#eef2e6] hover:text-orange xl:gap-[7px] xl:px-3"
-                aria-expanded={farmOpen}
-                onClick={() => setFarmOpen((open) => !open)}
-                onMouseEnter={() => setFarmOpen(true)}
-              >
-                Farming Life
-                <span className={`text-xs transition ${farmOpen ? "rotate-180" : ""}`}>⌄</span>
-              </button>
-              <div
-                className={`absolute top-full left-1/2 z-50 w-[210px] -translate-x-1/2 pt-2 transition ${
-                  farmOpen ? "visible translate-y-0 opacity-100" : "invisible pointer-events-none translate-y-2 opacity-0"
-                }`}
-              >
-                <div className="rounded-2xl border border-[#dedfce] bg-[#fffdf8] p-2 shadow-[0_18px_40px_rgba(17,48,37,.16)]">
-                  <div className="px-3 pb-1 pt-1">
-                    <NoApiNote />
+            {menu.map((item) =>
+              item.sub_menu?.length ? (
+                <div key={item.name} className="relative flex items-stretch" onMouseLeave={() => setOpenMenu(null)}>
+                  <button
+                    type="button"
+                    className="flex items-center gap-1.5 rounded-full px-2 py-2 hover:bg-[#eef2e6] hover:text-orange xl:gap-[7px] xl:px-3"
+                    aria-expanded={openMenu === item.name}
+                    onClick={() => setOpenMenu((open) => (open === item.name ? null : item.name))}
+                    onMouseEnter={() => setOpenMenu(item.name)}
+                  >
+                    {item.name}
+                    <span className={`text-xs transition ${openMenu === item.name ? "rotate-180" : ""}`}>⌄</span>
+                  </button>
+                  <div
+                    className={`absolute top-full left-1/2 z-50 w-[210px] -translate-x-1/2 pt-2 transition ${
+                      openMenu === item.name ? "visible translate-y-0 opacity-100" : "invisible pointer-events-none translate-y-2 opacity-0"
+                    }`}
+                  >
+                    <div className="rounded-2xl border border-[#dedfce] bg-[#fffdf8] p-2 shadow-[0_18px_40px_rgba(17,48,37,.16)]">
+                      {item.sub_menu.map((link) => (
+                        <Link key={`${link.url}-${link.name}`} href={link.url} className="block rounded-[10px] px-3 py-[11px] text-sm whitespace-nowrap hover:bg-[#eef2e6] hover:text-green-dark">
+                          {link.name}
+                        </Link>
+                      ))}
+                    </div>
                   </div>
-                  {farmLinks.map((link) => (
-                    <Link key={link.href} href={link.href} className="block rounded-[10px] px-3 py-[11px] text-sm whitespace-nowrap hover:bg-[#eef2e6] hover:text-green-dark">
-                      {link.label}
-                    </Link>
-                  ))}
                 </div>
-              </div>
-            </div>
-            <NavLink href="/revitalization">Revitalization</NavLink>
-            <NavLink href="/impact">Impact</NavLink>
-            <NavLink href="/#story">আমাদের গল্প</NavLink>
+              ) : (
+                <NavLink key={`${item.url}-${item.name}`} href={item.url}>
+                  {item.name}
+                </NavLink>
+              ),
+            )}
           </nav>
 
           <div className="ml-auto flex shrink-0 items-center gap-1.5 sm:gap-2 lg:ml-0">

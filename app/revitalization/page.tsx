@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
 import { HeritagePage } from "@/components/HeritagePage";
+import { CustomPageView, customPageMetadata } from "@/components/sections/CustomPageView";
+import { getCustomPage, hasSections } from "@/lib/api/sections";
 
-export const metadata: Metadata = {
-  title: "Revitalization",
-  description: "Intangible Heritage Products Deshojo Bazar.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return customPageMetadata(await getCustomPage("revitalization"), {
+    title: "Revitalization",
+    description: "Intangible Heritage Products Deshojo Bazar.",
+  });
+}
 
 const cards = [
   "Traditional food knowledge",
@@ -13,7 +17,11 @@ const cards = [
   "Community-led heritage preservation",
 ];
 
-export default function RevitalizationPage() {
+export default async function RevitalizationPage() {
+  // ERP custom page "revitalization" when it exists; built-in content otherwise
+  const page = await getCustomPage("revitalization");
+  if (hasSections(page)) return <CustomPageView page={page} />;
+
   return (
     <HeritagePage
       eyebrow="Revitalization • Intangible Heritage"

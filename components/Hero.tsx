@@ -7,20 +7,50 @@ import { useSite } from "@/lib/site";
 
 const fallbackSlides = ["/img/hero-farm.webp", "/img/hero-rice.webp", "/img/hero-brown-rice.webp"];
 
-export function Hero() {
-  const { heroSlides } = useSite();
+type HeroButton = { label: string; href: string };
+
+/**
+ * Home hero. Texts come from the ERP hero section (props); a slide's own title/subtitle wins when set.
+ * `slideImages` limits/orders the slides (hero section "slider_ids"); defaults to all Top Sliders.
+ */
+export function Hero({
+  tagline,
+  title,
+  subtitle,
+  buttons,
+  slideImages,
+  interval = 5200,
+  autoplay = true,
+}: {
+  tagline?: string;
+  title?: string;
+  subtitle?: string;
+  buttons?: HeroButton[];
+  slideImages?: { image: string; title?: string; subtitle?: string }[];
+  interval?: number;
+  autoplay?: boolean;
+} = {}) {
+  const site = useSite();
+  const heroSlides = slideImages?.length ? slideImages : site.heroSlides;
   const slides = useMemo(
     () => (heroSlides.length ? heroSlides.map((slide) => slide.image) : fallbackSlides),
     [heroSlides],
   );
+  const heroButtons = buttons?.length
+    ? buttons
+    : [
+        { label: "Shop Now →", href: "/shop" },
+        { label: "আমাদের গল্প", href: "/#story" },
+      ];
   const fromApi = heroSlides.length > 0;
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
     setIndex(0);
-    const timer = window.setInterval(() => setIndex((current) => (current + 1) % slides.length), 5200);
+    if (!autoplay || slides.length < 2) return;
+    const timer = window.setInterval(() => setIndex((current) => (current + 1) % slides.length), interval);
     return () => window.clearInterval(timer);
-  }, [slides]);
+  }, [slides, autoplay, interval]);
 
   const activeMeta = heroSlides[index];
 
@@ -43,11 +73,11 @@ export function Hero() {
       <div className="page-wrap relative z-[2] py-16 text-white sm:py-24 sm:pt-[100px] lg:py-[90px] lg:pt-[120px]">
         <div className="max-w-[610px]">
           <div className="mb-3 text-[11px] font-extrabold tracking-[1.8px] text-gold uppercase sm:mb-3.5 sm:text-[13px] sm:tracking-[2.2px]">
-            From village to your table
+            {tagline || "From village to your table"}
           </div>
           <h1 className="mb-4 font-serif text-[clamp(32px,9vw,44px)] leading-[1.05] font-bold sm:mb-[18px] sm:text-[clamp(42px,6vw,78px)] sm:leading-[1.03]">
-            {activeMeta?.title ? (
-              activeMeta.title
+            {activeMeta?.title || title ? (
+              activeMeta?.title || title
             ) : (
               <>
                 দেশজ খাবার,
@@ -57,21 +87,22 @@ export function Hero() {
             )}
           </h1>
           <p className="mb-6 max-w-[540px] text-[15px] leading-relaxed text-[#f3f4ef] sm:mb-[30px] sm:text-lg">
-            {activeMeta?.subtitle || "বাংলার মাঠ, কৃষক ও ঐতিহ্যের নির্বাচিত খাবার বিশ্বস্ত উৎস থেকে আপনার ঘরে।"}
+            {activeMeta?.subtitle || subtitle || "বাংলার মাঠ, কৃষক ও ঐতিহ্যের নির্বাচিত খাবার বিশ্বস্ত উৎস থেকে আপনার ঘরে।"}
           </p>
           <div className="flex flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:gap-2">
-            <Link
-              href="/shop"
-              className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-orange px-6 py-3.5 font-bold text-white transition hover:-translate-y-0.5 hover:shadow-[0_12px_24px_rgba(239,111,69,.25)] sm:min-h-[50px]"
-            >
-              Shop Now →
-            </Link>
-            <Link
-              href="/#story"
-              className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-white px-6 py-3.5 font-bold text-white transition hover:bg-white hover:text-green-dark sm:min-h-[50px]"
-            >
-              আমাদের গল্প
-            </Link>
+            {heroButtons.map((button, buttonIndex) => (
+              <Link
+                key={`${button.href}-${buttonIndex}`}
+                href={button.href}
+                className={
+                  buttonIndex === 0
+                    ? "inline-flex min-h-[48px] items-center justify-center rounded-full bg-orange px-6 py-3.5 font-bold text-white transition hover:-translate-y-0.5 hover:shadow-[0_12px_24px_rgba(239,111,69,.25)] sm:min-h-[50px]"
+                    : "inline-flex min-h-[48px] items-center justify-center rounded-full border border-white px-6 py-3.5 font-bold text-white transition hover:bg-white hover:text-green-dark sm:min-h-[50px]"
+                }
+              >
+                {button.label}
+              </Link>
+            ))}
           </div>
         </div>
       </div>

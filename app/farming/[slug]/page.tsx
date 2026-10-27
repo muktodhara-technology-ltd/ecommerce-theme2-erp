@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { HeritagePage } from "@/components/HeritagePage";
+import { CustomPageView, customPageMetadata } from "@/components/sections/CustomPageView";
+import { getCustomPage, hasSections } from "@/lib/api/sections";
 import { farms, getFarm } from "@/lib/farms";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -12,13 +14,25 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const farm = getFarm(slug);
-  return { title: farm?.title ?? "Farming Life", description: farm?.description };
+  return customPageMetadata(await getCustomPage(`farming/${slug}`), {
+    title: farm?.title ?? "Farming Life",
+    description: farm?.description,
+  });
 }
 
 export default async function FarmPage({ params }: Props) {
   const { slug } = await params;
+
+  // ERP custom page "farming/{slug}" (Ecommerce → Custom Pages) when it exists
+  const page = await getCustomPage(`farming/${slug}`);
+  if (hasSections(page)) return <CustomPageView page={page} />;
+
+  // Built-in content until the page is set up in the ERP
   const farm = getFarm(slug);
-  if (!farm) notFound();
+  if (!farm) {
+    if (page) return <CustomPageView page={page} />;
+    notFound();
+  }
 
   return (
     <HeritagePage

@@ -124,9 +124,50 @@ export function CheckoutView() {
     };
   }, []);
 
+  // Coupon: validated by the ERP against the current subtotal; dropped if the cart changes.
+  const [couponCode, setCouponCode] = useState("");
+  const [coupon, setCoupon] = useState<{ id: string | null; code: string; discount: number; forSubtotal: number } | null>(null);
+  const [couponError, setCouponError] = useState("");
+  const [couponLoading, setCouponLoading] = useState(false);
+
+  useEffect(() => {
+    if (coupon && coupon.forSubtotal !== subtotal) {
+      setCoupon(null);
+      setCouponError("কার্ট পরিবর্তন হয়েছে — কুপন আবার প্রয়োগ করুন।");
+    }
+  }, [subtotal, coupon]);
+
+  async function applyCoupon() {
+    const code = couponCode.trim();
+    if (!code || subtotal <= 0) return;
+    setCouponLoading(true);
+    setCouponError("");
+    try {
+      const { data } = await instance.post(ApiLink.ecommerceCouponApply, { coupon_code: code, order_total: roundMoney(subtotal) });
+      if (!data?.success) {
+        setCoupon(null);
+        setCouponError(data?.message || "কুপন প্রয়োগ করা যায়নি।");
+        return;
+      }
+      setCoupon({
+        id: data.data?.coupon?.id ?? null,
+        code: data.data?.coupon?.coupon_code || code,
+        discount: Number(data.data?.discount_amount) || 0,
+        forSubtotal: subtotal,
+      });
+    } catch (err: unknown) {
+      const message = (err as { response?: { data?: { message?: string } } })?.response?.data?.message;
+      setCoupon(null);
+      setCouponError(message || "কুপন প্রয়োগ করা যায়নি।");
+    } finally {
+      setCouponLoading(false);
+    }
+  }
+
   const selectedShipping = shippingOptions.find((option) => option.key === shippingKey);
   const shippingCharge = selectedShipping?.cost || 0;
-  const grandTotal = roundMoney(subtotal + shippingCharge);
+  const discount = coupon ? Math.min(coupon.discount, subtotal) : 0;
+  const grandTotal = roundMoney(subtotal - discount + shippingCharge);
 
   function update(key: keyof typeof form, value: string) {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -169,12 +210,12 @@ export function CheckoutView() {
       })),
       subtotal: roundMoney(subtotal),
       tax_total: 0,
-      discount_total: 0,
+      discount_total: roundMoney(discount),
       shipping_charge: roundMoney(shippingCharge),
       packing_charge: 0,
       packing_applied: false,
       grand_total: grandTotal,
-      coupon: null,
+      coupon: coupon ? { code: coupon.code, id: coupon.id, discount_amount: roundMoney(discount) } : null,
       shipping: {
         method: selectedShipping?.method || "regular",
         label: selectedShipping?.label || "Regular",
@@ -325,9 +366,53 @@ export function CheckoutView() {
                 <span className="text-muted">Subtotal</span>
                 <span>{money(subtotal)}</span>
               </div>
+              {discount > 0 ? (
+                <div className="mt-1.5 flex justify-between text-sm text-green">
+                  <span>Coupon ({coupon?.code})</span>
+                  <span>− {money(discount)}</span>
+                </div>
+              ) : null}
               <div className="mt-1.5 flex justify-between text-sm">
                 <span className="text-muted">Shipping</span>
                 <span>{money(shippingCharge)}</span>
+              </div>
+              <div className="mt-4 border-t border-[#eee] pt-3">
+                <div className="flex gap-2">
+                  <input
+                    value={couponCode}
+                    onChange={(e) => setCouponCode(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        applyCoupon();
+                      }
+                    }}
+                    placeholder="কুপন কোড"
+                    className="min-w-0 flex-1 rounded-[11px] border border-[#dcd6ca] px-[13px] py-2.5 text-sm outline-none focus:border-green"
+                  />
+                  {coupon ? (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setCoupon(null);
+                        setCouponCode("");
+                      }}
+                      className="rounded-full border border-[#dcd6ca] px-4 text-sm font-bold"
+                    >
+                      Remove
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      disabled={couponLoading || !couponCode.trim()}
+                      onClick={applyCoupon}
+                      className="rounded-full bg-green-dark px-4 text-sm font-bold text-white disabled:opacity-60"
+                    >
+                      {couponLoading ? "..." : "Apply"}
+                    </button>
+                  )}
+                </div>
+                {couponError ? <p className="mt-1.5 text-xs text-[#a33]">{couponError}</p> : null}
               </div>
               <div className="mt-3 flex justify-between border-t border-[#eee] pt-3 text-lg font-black sm:text-xl">
                 <span>Total</span>

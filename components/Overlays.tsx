@@ -7,14 +7,9 @@ import { useCustomerAuth } from "@/lib/api/auth";
 import { useCatalog } from "@/lib/catalog";
 import { ProductImage } from "@/components/ProductImage";
 import { money, productHref } from "@/lib/products";
+import { useSite } from "@/lib/site";
+import { DEFAULT_MENU } from "@/components/Header";
 
-const farmLinks = [
-  { href: "/farming/haor", label: "Haor Farm" },
-  { href: "/farming/drought", label: "Drought Farm" },
-  { href: "/farming/coast", label: "Coast Farm" },
-  { href: "/farming/hill", label: "Hill Farm" },
-  { href: "/farming/flood", label: "Flood Farm" },
-];
 
 export function Overlays() {
   const store = useStore();
@@ -177,6 +172,8 @@ function SearchOverlay() {
 function MobileMenu() {
   const { mobileOpen, setMobileOpen } = useStore();
   const { isLoggedIn, logout } = useCustomerAuth();
+  const { headerMenu } = useSite();
+  const menu = headerMenu.length ? headerMenu : DEFAULT_MENU;
   if (!mobileOpen) return null;
 
   return (
@@ -189,26 +186,29 @@ function MobileMenu() {
       </div>
       <nav className="mt-[30px] flex flex-col font-extrabold [&_a]:border-b [&_a]:border-[#eee] [&_a]:py-[13px]" aria-label="Mobile navigation">
         <Link href="/">Home</Link>
-        <Link href="/shop">Shop All</Link>
-        <Link href="/#concerns">Shop by Concerns</Link>
-        <Link href="/#videos">Videos</Link>
-        <details className="border-b border-[#eee] [&_summary]:flex [&_summary]:cursor-pointer [&_summary]:list-none [&_summary]:items-center [&_summary]:justify-between [&_summary]:py-[13px]">
-          <summary>
-            Farming Life <span>+</span>
-          </summary>
-          <div className="pb-2 pl-3.5">
-            {farmLinks.map((link) => (
-              <Link key={link.href} href={link.href} className="block border-0 py-2.5 text-sm font-bold">
-                {link.label}
-              </Link>
-            ))}
-          </div>
-        </details>
-        <Link href="/revitalization">Revitalization</Link>
-        <Link href="/#farm-life">Farm Life overview</Link>
-        <Link href="/#beyond">Beyond Our Products</Link>
-        <Link href="/impact">Climate & Community Impact</Link>
-        <Link href="/#story">আমাদের গল্প</Link>
+        {menu.map((item) =>
+          item.sub_menu?.length ? (
+            <details
+              key={item.name}
+              className="border-b border-[#eee] [&_summary]:flex [&_summary]:cursor-pointer [&_summary]:list-none [&_summary]:items-center [&_summary]:justify-between [&_summary]:py-[13px]"
+            >
+              <summary>
+                {item.name} <span>+</span>
+              </summary>
+              <div className="pb-2 pl-3.5">
+                {item.sub_menu.map((link) => (
+                  <Link key={`${link.url}-${link.name}`} href={link.url} className="block border-0 py-2.5 text-sm font-bold">
+                    {link.name}
+                  </Link>
+                ))}
+              </div>
+            </details>
+          ) : (
+            <Link key={`${item.url}-${item.name}`} href={item.url}>
+              {item.name}
+            </Link>
+          ),
+        )}
         {isLoggedIn ? (
           <>
             <Link href="/dashboard" onClick={() => setMobileOpen(false)}>

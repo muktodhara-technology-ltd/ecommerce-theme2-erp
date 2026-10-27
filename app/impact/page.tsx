@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
 import { heritageIcons } from "@/components/Icons";
 import { NoApiNote } from "@/components/NoApiNote";
+import { CustomPageView, customPageMetadata } from "@/components/sections/CustomPageView";
+import { getCustomPage, hasSections } from "@/lib/api/sections";
 
-export const metadata: Metadata = {
-  title: "Haor Climate & Livelihood Initiative",
-  description: "Deshojo Bazar's community-led Murta, Shital Pati and climate-resilient livelihoods initiative in Tahirpur, Sunamganj, Bangladesh.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return customPageMetadata(await getCustomPage("impact"), {
+    title: "Haor Climate & Livelihood Initiative",
+    description: "Deshojo Bazar's community-led Murta, Shital Pati and climate-resilient livelihoods initiative in Tahirpur, Sunamganj, Bangladesh.",
+  });
+}
 
 const model = [
   ["01", "Grow Murta", "Encourage Murta cultivation across suitable parts of the haor region and strengthen local knowledge on propagation and management."],
@@ -29,7 +33,11 @@ const funding = [
   ["05", "Replication & learning", "document what works and adapt the model for other suitable haor communities."],
 ];
 
-export default function ImpactPage() {
+export default async function ImpactPage() {
+  // ERP custom page "impact" when it exists; built-in content otherwise
+  const page = await getCustomPage("impact");
+  if (hasSections(page)) return <CustomPageView page={page} />;
+
   return (
     <div className="bg-paper">
       <div className="page-wrap pt-4">
