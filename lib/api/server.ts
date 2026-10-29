@@ -1,5 +1,7 @@
 import { normalizeEcommerceDomainName } from "@/lib/api/domain";
 
+export const ECOMMERCE_CACHE_TAG = "ecommerce";
+
 export async function ecommerceGet(
   apiPath: string,
   query: Record<string, string | number | undefined> = {},
@@ -24,7 +26,8 @@ export async function ecommerceGet(
   try {
     const res = await fetch(url, {
       headers: { Accept: "application/json" },
-      next: { revalidate },
+      // The tag lets /api/revalidate drop every API response when the admin saves.
+      next: { revalidate, tags: [ECOMMERCE_CACHE_TAG] },
     });
     if (!res.ok) return null;
     const body = await res.json();
